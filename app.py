@@ -53,7 +53,7 @@ def post():
         'participants': participants_receive,
         'postnum': post_receive,
     }
-    db.users.insert_one(doc)
+    db.posts.insert_one(doc)
 
     return jsonify({'msg': '등록완료!'})
 
@@ -72,7 +72,7 @@ def edit():
         'participants': participants_receive,
         'postnum': post_receive,
     }
-    db.users.insert_one(doc)
+    db.posts.insert_one(doc)
 
     return jsonify({'msg': '수정 완료!'})
 
