@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Webpage Title -->
+    <title>게시글 작성</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bulma CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        .mypost {
+            width: 95%;
+            max-width: 700px;
+            margin: 20px auto 20px auto;
+
+            box-shadow: 0px 0px 3px 0px black;
+            padding: 20px;
+        }
+
+        .post_btn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            margin-top: 20px;
+            margin-left: 400px;
+            padding: 20px;
+        }
+
+        .post_btn > button {
+            margin-right: 40px;
+        }
+
+        .post_num {
+            padding-left: 50%;
+            margin-top: 20px;
+        }
+
+        .header-box {
+            padding-left: 50px;
+        }
+
+        .header-id {
+            font-size: 70%;
+            position: fixed;
+            right: 50px;
+            top: 10px;
+
+        }
+    </style>
+    <script>
+
+        function post() {
+
+            let post_info = "{{ user_info.id }}"
+            let title = $("#title").val()
+            let content = $("#content").val()
+            let participants = $("#participants").val()
+
+
+            $.ajax({
+                type: "POST",
+                url: '/register',
+                data: {
+                    post_info_give: post_info,
+                    title_give: title,
+                    content_give: content,
+                    participants_give: participants,
+                },
+                success: function (response) {
+
+                    alert("!")
+                    window.location.href = "/=" + title
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<section class="hero is-info">
+    <div class="header-id">
+        안녕하세요 {{ user_info.id }}님!
+    </div>
+    <div class="hero-body">
+        <div class="header-box">
+            <p class="title">
+                끼리 끼리
+            </p>
+            <p class="subtitle">
+                subtitle
+            </p>
+        </div>
+    </div>
+</section>
+<div class="mypost">
+    <div>
+        <textarea id="content" class="textarea is-info" placeholder="내용 작성"></textarea>
+    </div>
+
+    <div class="post_num">
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">인원</label>
+            </div>
+            <div class="field-body">
+                <div class="field is-narrow">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select id="participants">
+                                <option value="">----인원을 선택하세요----</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post_btn">
+        <button onclick="posting()" class="button is-link">등록</button>
+        <button onclick="close()" class="button is-danger">닫기</button>
+    </div>
+</div>
+
+
+</body>
+</html>
