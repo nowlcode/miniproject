@@ -127,5 +127,53 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+@app.route('/post/register')
+def post_page():
+    id_receive = request.form['id_give']
+    return render_template('index.html')
+
+@app.route('/post/register', methods=['POST'])
+def post():
+    title_receive = request.form['title_give']
+    img_receive = request.form['image_give']
+    content_receive = request.form['content_give']
+    participants_receive = request.form['participants_give']
+    post_receive = request.form['postnum_give']
+
+    doc = {
+        'title':title_receive,
+        'image':img_receive,
+        'content':content_receive,
+        'participants': participants_receive,
+        'postnum': post_receive,
+    }
+    db.posts.insert_one(doc)
+
+    return jsonify({'msg': '등록완료!'})
+
+@app.route('/post/edit')
+def post_for_edit():
+    id_receive = request.form['id_give']
+
+    return render_template('index.html')
+
+@app.route('/post/edit', methods=['POST'])
+def post_edit():
+    title_receive = request.form['title_give']
+    img_receive = request.form['image_give']
+    content_receive = request.form['content_give']
+    participants_receive = request.form['participants_give']
+    post_receive = request.form['postnum_give']
+
+    doc = {
+        'title': title_receive,
+        'image': img_receive,
+        'content': content_receive,
+        'participants': participants_receive,
+    }
+    db.posts.update_one({'postnum':post_receive}, {'$set':doc})
+
+    return jsonify({'msg': '수정 완료!'})
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5001, debug=True)
