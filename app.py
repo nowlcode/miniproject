@@ -65,7 +65,7 @@ def edit():
     participants_receive = request.form['participants_give']
     post_receive = request.form['postnum_give']
 
-    db.posts.update_one({'postnum': post_receive}, {'$set':{'title' : title_receive}}, {'$set':{'image' : img_receive}}, {'$set':{'content' : content_receive}}, {{'$set':{'participants': participants_receive}}})
+    db.posts.update_one({'postnum': post_receive}, {'$set':{'title' : title_receive}}, {'$set':{'image' : img_receive}}, {'$set':{'content' : content_receive}}, {'$set':{'participants': participants_receive}})
 
     return jsonify({'msg': '수정 완료!'})
 
