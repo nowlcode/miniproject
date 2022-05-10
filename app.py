@@ -59,9 +59,5 @@ def main_post():
     post_list = list(db.posts.find({}, {'_id': False})).reverse()
     return jsonify({'msg': post_list})
 
-@app.route('/signup', methods=['GET'])
-def signup_page():
-    return render_template('signup.html')
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5001, debug=True)
