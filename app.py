@@ -1,9 +1,9 @@
+from crypt import methods
 from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 from pymongo import MongoClient
-# client = MongoClient('localhost', 27017)
-client = MongoClient('mongodb://test:test@localhost', 27017)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta_plus_week1
 
 from datetime import datetime
@@ -38,5 +38,14 @@ def sign_up():
 
     return jsonify({'msg': '저장 완료!'})
 
+@app.route('/posts', methods=['GET'])
+def main_post():
+    post_list = list(db.posts.find({}, {'_id': False})).reverse()
+    return jsonify({'msg': post_list})
+
+@app.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template('signup.html')
+
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5001, debug=True)
