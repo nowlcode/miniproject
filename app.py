@@ -38,7 +38,13 @@ def sign_up():
 
     return jsonify({'msg': '저장 완료!'})
 
+# GET post(main) page
 @app.route('/posts', methods=['GET'])
+def post():
+    return render_template('main.html')
+
+# GET posts list
+@app.route('/posts/list', methods=['GET'])
 def main_post():
     post_list = list(db.posts.find({}, {'_id': False})).reverse()
     return jsonify({'msg': post_list})
