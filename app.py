@@ -21,15 +21,16 @@ SECRET_KEY = 'SPARTA'
 #################################
 @app.route('/')
 def home():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.miniproject.find_one({"id": payload['id']})
-        return render_template('login.html', nickname = user_info['nick'])
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg = "로그인 시간이 만료됐습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg= " 로그인 정보가 존재하지 않습니다."))
+    # token_receive = request.cookies.get('mytoken')
+    # try:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.miniproject.find_one({"id": payload['id']})
+    #     return render_template('login.html', nickname = user_info['nick'])
+    # except jwt.ExpiredSignatureError:
+    #     return redirect(url_for("login", msg = "로그인 시간이 만료됐습니다."))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for("login", msg= " 로그인 정보가 존재하지 않습니다."))
+    return render_template('index.html')
 
 
 @app.route('/signup')
@@ -64,6 +65,15 @@ def api_signup():
 # GET post(main) page
 @app.route('/posts', methods=['GET'])
 def post():
+    # token_receive = request.cookies.get('mytoken')
+    # try:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.miniproject.find_one({"id": payload['id']})
+    #     return render_template('login.html', nickname = user_info['nick'])
+    # except jwt.ExpiredSignatureError:
+    #     return redirect(url_for("login", msg = "로그인 시간이 만료됐습니다."))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for("login", msg= " 로그인 정보가 존재하지 않습니다."))
     return render_template('main.html')
 
 # GET posts list
