@@ -1,9 +1,10 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from crypt import methods
+from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta99@cluster0.0ngea.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta
+client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta_plus_week1
 
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
@@ -47,5 +48,20 @@ def api_signup():
     return jsonify({'result': 'success'})
 
 
+# GET post(main) page
+@app.route('/posts', methods=['GET'])
+def post():
+    return render_template('main.html')
+
+# GET posts list
+@app.route('/posts/list', methods=['GET'])
+def main_post():
+    post_list = list(db.posts.find({}, {'_id': False})).reverse()
+    return jsonify({'msg': post_list})
+
+@app.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template('signup.html')
+
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5001, debug=True)
