@@ -38,6 +38,13 @@ def sign_up():
 
     return jsonify({'msg': '저장 완료!'})
 
+
+@app.route('/post/register')
+def post_page():
+    id_receive = request.form['id_give']
+
+    return render_template('index.html')
+
 @app.route('/post/register', methods=['POST'])
 def post():
     title_receive = request.form['title_give']
@@ -57,8 +64,14 @@ def post():
 
     return jsonify({'msg': '등록완료!'})
 
+@app.route('/post/edit')
+def post_for_edit():
+    id_receive = request.form['id_give']
+
+    return render_template('index.html')
+
 @app.route('/post/edit', methods=['POST'])
-def edit():
+def post_edit():
     title_receive = request.form['title_give']
     img_receive = request.form['image_give']
     content_receive = request.form['content_give']
