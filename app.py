@@ -63,16 +63,8 @@ def edit():
     img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    post_receive = request.form['postnum_give']
 
-    doc = {
-        'title':title_receive,
-        'image':img_receive,
-        'content':content_receive,
-        'participants': participants_receive,
-        'postnum': post_receive,
-    }
-    db.posts.update_one(doc)
+    db.posts.update_one({'title' : var(title_receive)}, {'image' : var(img_receive)}, {'content' : var(content_receive)}, {'participants': var(participants_receive)})
 
     return jsonify({'msg': '수정 완료!'})
 
