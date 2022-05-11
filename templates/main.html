@@ -18,6 +18,7 @@
 
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
     <title>끼리끼리</title>
 
@@ -56,7 +57,7 @@
                 url: "/posts/list",
                 data: {},
                 success: function (response) {
-                    let result = response["data"].reverse():wq
+                    let result = response["data"].reverse()
                     for (let i = 0; i < result.length; i++) {
                         {#const nickname = response[i]['nickname']#}
                         const content = result[i]['content']
@@ -190,6 +191,10 @@ function posting() {
         }
     </script>
     <style>
+        * {
+            font-family: 'Jua', sans-serif;
+            color: royalblue;
+        }
         .logo {
             background-color: lightgoldenrodyellow;
             height: 150px;
@@ -295,18 +300,18 @@ function posting() {
 </head>
 <body>
 <div id="header">
-    <div class="logo">
-        <a href="#" style="color:peru"><h1>끼리끼리</h1></a>
-    </div>
-    <div class="top-menu">
-        <ul id="nav">
-            <li><a href="#">User Nickname</a>
-                <ul>
-                    <li><a href="#">로그아웃</a></li>
-                    <li><a href="#">내 게시글 보기</a></li>
-                </ul>
-            </li>
-        </ul>
+    <div class="logo" style="padding: 10px; display:flex; justify-content: space-between; align-items: center ">
+        <a href="#" style="display: inline-block;"><h1>끼리끼리</h1></a>
+        <div class="top-menu" style="display: inline-block">
+            <ul id="nav">
+                <li><a href="#">User Nickname</a>
+                    <ul>
+                        <li><a href="#">로그아웃</a></li>
+                        <li><a href="#">내 게시글 보기</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <div id="container">
