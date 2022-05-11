@@ -66,7 +66,7 @@ def api_signup():
 
 # GET post(main) page
 @app.route('/posts', methods=['GET'])
-def post():
+def post_main():
     # token_receive = request.cookies.get('mytoken')
     # try:
     #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -84,8 +84,17 @@ def main_post():
     post_list = list(db.posts.find({}, {'_id': False})).reverse()
     return jsonify({'msg': post_list})
 
-if __name__ == '__main__':
-    app.run('0.0.0.0', port=5001, debug=True)
+# GET posts detail
+@app.route('/posts/detail')
+def detail():
+    return render_template('postDetail.html')
+
+# GET /posts/detail
+@app.route('/posts/detail', methods=['GET'])
+def post_detail():
+    post_list = list(db.posts.find({}, {'_id': False})).reverse()
+    return jsonify({'data': post_list})
+
 
 @app.route("/login", methods = ["POST"])
 def login_page():
@@ -96,7 +105,7 @@ def login_page():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     #id, 암호화된 pw를 가지고 해당 유저를 찾습니다.
-    result = db.miniproject.find_one({'id': id_receive, 'pw':pw_hash})
+    result = db.users.find_one({'id': id_receive, 'pw':pw_hash})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
@@ -106,7 +115,7 @@ def login_page():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=3600)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 

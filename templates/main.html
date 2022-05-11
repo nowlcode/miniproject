@@ -34,8 +34,36 @@
 
 
     <script>
+<<<<<<< HEAD
         $(document).ready(function () {
             show_list();
+=======
+    $(document).ready(function () {
+        show_list();
+    };
+
+    function participate(num) {
+        $.ajax({
+            type: "POST",
+            url: "/post/participate",
+            data: {num_give: num},
+            success: function (response) {
+                console.log(response["msg"])
+                window.location.reload()
+            }
+        });
+    }
+
+    function participate(num) {
+        $.ajax({
+            type: "POST",
+            url: "/post/undo",
+            data: {num_give: num},
+            success: function (response) {
+                console.log(response['msg'])
+                window.location.reload()
+            }
+>>>>>>> 67ac0a829c031302836762d6cafaf151da4103c3
         });
 
         function participate(num) {
