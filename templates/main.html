@@ -34,14 +34,6 @@
 
 
     <script>
-<<<<<<< HEAD
-        $(document).ready(function () {
-            show_list();
-=======
-    $(document).ready(function () {
-        show_list();
-    };
-
     function participate(num) {
         $.ajax({
             type: "POST",
@@ -63,7 +55,7 @@
                 console.log(response['msg'])
                 window.location.reload()
             }
->>>>>>> 67ac0a829c031302836762d6cafaf151da4103c3
+
         });
 
         function participate(num) {
@@ -179,6 +171,35 @@
         //
         //     }
         // }
+function posting() {
+
+            let post_info = "{{ user_info.id }}"
+            let title = $("#title").val()
+            let image = $("#image").val()
+            let content = $("#content").val()
+            let participants = $("#participants").val()
+            let date = new Date().toISOString()
+
+
+            $.ajax({
+                type: "POST",
+                url: '/register',
+                data: {
+                    post_info_give: post_info,
+                    title_give: title,
+                    image_give: image,
+                    content_give: content,
+                    participants_give: participants,
+                    date_give: date
+                },
+                success: function (response) {
+                    console.log(response)
+
+                    alert("!")
+                    window.location.href = "/=" + title
+                }
+            });
+        }
     </script>
     <style>
         .logo {
@@ -302,7 +323,7 @@
 </div>
 <div id="container">
     <div>
-        <button type="button" class="btn btn-secondary" style="float:right;margin:10px 50px 0px 0px;">게시글 등록하기</button>
+        <button onclick="$('#modal').css('display', 'block');" style="float:right;margin:10px 50px 0px 0px;">게시글 등록하기</button>
     </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <a href="#">
@@ -347,6 +368,61 @@
         </div>
     </div>
 </div>
+<div id="modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">게시글 작성</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="title"></textarea>
+                    <label for="title">제목</label>
+                </div>
 
+                <div class="mb-3">
+                    <span class="file-label">
+                            사진 올리기
+                          </span>
+                    <input class="form-control form-control-sm" id="image" type="file">
+                </div>
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="content"
+                              style="height: 100px"></textarea>
+                    <label for="content">내용 작성</label>
+
+                </div>
+
+                <div class="post_num">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">인원</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field is-narrow">
+                                <div class="control">
+                                    <div class="select is-fullwidth">
+                                        <select id="participants">
+                                            <option value="">----인원을 선택하세요----</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="$('#modal').css('display', 'none');" data-bs-dismiss="modal" >닫기</button>
+                <button type="button" class="btn btn-primary" onclick="posting()" class="button is-success">저장하기</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
