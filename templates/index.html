@@ -16,6 +16,9 @@
       crossorigin="anonymous"
     />
 
+      <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -29,6 +32,7 @@
       href="https://fonts.googleapis.com/css?family=Stylish&display=swap"
       rel="stylesheet"
     />
+      <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
     <title>끼리끼리</title>
     <style>
@@ -55,6 +59,7 @@
         margin: 20px auto 0px auto;
         box-shadow: 0px 0px 3px 0px gray;
         padding: 20px;
+          background-color: white;
       }
       .myBtn {
         display: flex;
@@ -62,38 +67,49 @@
         align-items: center;
         margin-top: 10px;
       }
+      * {
+        font-family: 'Jua', sans-serif;
+        color: royalblue;
+    }
+    .logo {
+        background-color: lightgoldenrodyellow;
+        height: 150px;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        /*padding: 0px 50px 0px 50px;*/
+    }
     </style>
   </head>
   <body>
-    <div class="myPost">
-      <div class="form-floating mb-3">
-        <input class="form-control" id="userId" placeholder="아이디" />
-      </div>
+    <div style="background-color: lightgoldenrodyellow;">
+        <div id="header">
+            <div class="logo" style="padding: 10px; display:flex; justify-content: center; align-items: center ">
+                <h1 style="display: inline-block; "><span style="font-size: 55px">끼리끼리</span></h1>
+            </div>
+        </div>
+        <div class="myPost">
+          <div class="form-floating mb-3">
+            <input class="form-control" id="userId" placeholder="아이디" />
+          </div>
 
-      <div class="form-floating">
-        <input
-          class="form-control"
-          id="password"
-          placeholder="비밀번호"
-          type="password"
-        />
-      </div>
-      <div class="myBtn">
-        <button type="button" class="btn btn-dark" onclick="Login()">
-          로그인
-        </button>
-        <button type="button" class="btn btn-dark" onclick="Signup()">
-          회원가입
-        </button>
-      </div>
-    </div>
-
-    <div class="footer-content">
-      <div class="footer_cell">
-        Copyright©
-        <a href="#">Ggiri Ggiri 끼리끼리</a>
-        All rights reserved.
-      </div>
+          <div class="form-floating">
+            <input
+              class="form-control"
+              id="password"
+              placeholder="비밀번호"
+              type="password"
+            />
+          </div>
+          <div class="myBtn" style="display: flex; justify-content: space-around">
+            <button class="button is-primary" onclick="Login()">
+              로그인
+            </button>
+            <button class="button is-primary" onclick="Signup()">
+              회원가입
+            </button>
+          </div>
+        </div>
     </div>
   </body>
 </html>
