@@ -34,18 +34,24 @@
 
 
     <script>
-<<<<<<< HEAD
 
         $(document).ready(function () {
             show_list();
         });
-=======
-    $(document).ready(function () {
-        show_list();
-    })
->>>>>>> 05f18f548b38663451d52cfc355ea956234f6e3d
 
         function participate(num) {
+            $.ajax({
+                type: "POST",
+                url: "/post/done",
+                data: {num_give: num},
+                success: function (response) {
+                    console.log(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+
+        function cancel(num) {
             $.ajax({
                 type: "POST",
                 url: "/post/undo",
@@ -57,24 +63,41 @@
             });
         }
 
+        function complete(num) {
+            $.ajax({
+                type: "POST",
+                url: "/post/complete",
+                data: {num_give: num},
+                success: function (response) {
+                    console.log(response)
+                    let title = response['title']
+                    console.log(title)
+                    alert(title + '방은 참가 인원 수 초과입니다!')
+                    window.location.reload()
+                }
+            });
+        }
+
         function show_list() {
             $.ajax({
                 type: "GET",
                 url: "/posts/list",
                 data: {},
                 success: function (response) {
-                    let result = response["data"].reverse():wq
+                    let result = response["data"].reverse()
                     for (let i = 0; i < result.length; i++) {
                         {#const nickname = response[i]['nickname']#}
-                        const content = result[i]['content']
-                        const dateTime = result[i]['date']
-                        const participants = result[i]["participants"];
                         const title = result[i]["title"];
-                        {#const postNumber = response[i]["postnum"];#}
-                        {#const done = response[i]["postnum"];#}
-                        {#const num = response[i]["num"]#}
+                        const content = result[i]['content']
+                        const participants = result[i]["participants"];
+                        const dateTime = result[i]['date']
+                        const partNum = result[i]["partNum"];
+                        const num = result[i]["num"]
+                        const done = result[i]["done"]
 
-                        let temp_html = `<a href="#">
+                        let temp_html = ``
+                        if (done == 0 & partNum < participants) {
+                            temp_html = `<a href="#">
                                             <div class="col">
                                                 <div class="card h-100">
                                                     <img src= "../static/helloworld.png"
@@ -87,45 +110,63 @@
                                                 </div>
                                                 <div class="card-footer">
                                                     <small class="text-muted">
-                                                        <button onclick="participate(4)" class="btn btn-primary">참가하기 [현재 숫자:
-                                                            1/${participants}]
+                                                        <button onclick="participate(${num})" class="btn btn-primary">참가하기 [현재 숫자:
+                                                            ${partNum}/${participants}]
                                                         </button>
                                                     </small>
                                                 </div>
                                             </div>
                                         </a>`
-                        {#if (done == 0) {#}
-                        {#    temp_html = `<a href="#">#}
-                        {#                <div class="card" style="width: 18rem;">#}
-                        {#                    <img src="${image}"#}
-                        {#                         class="card-img-top" alt="...">#}
-                        {#                    <div class="card-body">#}
-                        {#                        <h5 class="card-title">${title}</h5>#}
-                        {#                        <p>${dateTime}</p>#}
-                        {#                        <p>${nickname}</p>#}
-                        {#                        <button onclick="participate(${num})" class="btn btn-primary">참가하기 [현재 숫자: ${postNumber}/${participants}]</button>#}
-                        {#                    </div>#}
-                        {#                </div>#}
-                        {#            </a>`#}
-                        //{#} else {#}
-                        {#    temp_html = `<a href="#">#}
-                        {#                <div class="card" style="width: 18rem;">#}
-                        {#                    <img src="${image}"#}
-                        {#                         class="card-img-top" alt="...">#}
-                        {#                    <div class="card-body">#}
-                        {#                        <h5 class="card-title">${title}</h5>#}
-                        {#                        <p>${dateTime}</p>#}
-                        {#                        <p>${nickname}</p>#}
-                        {#                        <button onclick="cancel(${num})" class="btn btn-primary">취소 [현재 숫자: ${postNumber}+1/${participants}</button>#}
-                        {#                    </div>#}
-                        {#                </div>#}
-                        {#            </a>`#}
-                        //{#}#}
+                            $("#post-card").append(temp_html);
+                        } else if (done == 1) {
+                            temp_html = `<a href="#">
+                                            <div class="col">
+                                                <div class="card h-100">
+                                                    <img src= "../static/helloworld.png"
+                                                         class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${title}</h5>
+                                                        <h6>${content}</h6>
+                                                        <p>${dateTime}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted">
+                                                        <button onclick="cancel(${num})" class="btn btn-danger">취소 [현재 숫자:
+                                                            ${partNum}/${participants}]
+                                                        </button>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>`
+                            $("#post-card").append(temp_html);
 
+                        } else {
+                            temp_html = `<a href="#">
+                                            <div class="col">
+                                                <div class="card h-100">
+                                                    <img src= "../static/helloworld.png"
+                                                         class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${title}</h5>
+                                                        <h6>${content}</h6>
+                                                        <p>${dateTime}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted">
+                                                        <button onclick="complete(${num})" class="btn btn-warning">모든 인원 접수완료! [현재 숫자:
+                                                            ${partNum}/${participants}]
+                                                        </button>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>`
+                            $("#post-card").append(temp_html);
 
-                        $("#post-card").append(temp_html);
+                        }
                     }
-                },
+                }
             });
         }
 
@@ -137,7 +178,7 @@
             let content = $("#content").val()
             let participants = $("#participants").val()
             let date = new Date().toISOString()
-
+            let partNum = 0
 
             $.ajax({
                 type: "POST",
@@ -147,7 +188,8 @@
                     image_give: image,
                     content_give: content,
                     participants_give: participants,
-                    date_give: date
+                    date_give: date,
+                    partNum_give: partNum
                 },
                 success: function (response) {
                     console.log(response)
@@ -176,7 +218,18 @@
 
         /*.top-menu {*/
         /*    background-color: #ffcab2;*/
-        /*    {#float: right;#}*/
+        /*
+
+
+
+
+
+
+
+
+
+
+        {#float: right;#}           */
         /*}*/
 
         #header, #section, #container, #footer {
@@ -282,13 +335,11 @@
 </div>
 <div id="container">
     <div>
-        <button onclick="$('#modal').css('display', 'block');" type="button" class="btn btn-secondary" style="float:right;margin:10px 50px 0px 0px;">게시글 등록하기
+        <button onclick="$('#modal').css('display', 'block');" type="button" class="btn btn-secondary"
+                style="float:right;margin:10px 50px 0px 0px;">게시글 등록하기
         </button>
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4"  id="post-card">
-
-    </div>
-</div>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="post-card"></div>
 </div>
 <div id="footer" role="contentinfo">
     <div class="footer_inner">
@@ -314,14 +365,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">게시글 작성</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-floating">
                     <textarea class="form-control" placeholder="Leave a comment here" id="title"></textarea>
                     <label for="title">제목</label>
                 </div>
-
                 <div class="mb-3">
                     <span class="file-label">
                             사진 올리기
@@ -332,9 +381,7 @@
                     <textarea class="form-control" placeholder="Leave a comment here" id="content"
                               style="height: 100px"></textarea>
                     <label for="content">내용 작성</label>
-
                 </div>
-
                 <div class="post_num">
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
