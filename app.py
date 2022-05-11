@@ -4,8 +4,10 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta_plus_week1
+client = MongoClient('mongodb+srv://test:sparta99@cluster0.0ngea.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
+# db = client.dbsparta_plus_week1
 
 import certifi
 ca = certifi.where()
@@ -144,22 +146,30 @@ def post_page():
 
 @app.route('/post/register', methods=['POST'])
 def post():
+    #닉네임을 가져오는 기능 추가해야할 것 같음
     title_receive = request.form['title_give']
-    img_receive = request.form['image_give']
+    # img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    post_receive = request.form['postnum_give']
+    postnum_receive = request.form['postnum_give']
 
     doc = {
         'title':title_receive,
-        'image':img_receive,
+
+        # 'image':img_receive,
         'content':content_receive,
         'participants': participants_receive,
-        'postnum': post_receive,
+        'postnum': postnum_receive,
     }
     db.posts.insert_one(doc)
 
     return jsonify({'msg': '등록완료!'})
+
+@app.route('/post/edit')
+def post_():
+    id_receive = request.form['id_give']
+
+    return render_template('index.html')
 
 @app.route('/post/edit')
 def post_for_edit():
