@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta99@cluster0.0ngea.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 # client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
 # db = client.dbsparta_plus_week1
@@ -81,8 +81,10 @@ def post_main():
 # GET posts list
 @app.route('/posts/list', methods=['GET'])
 def main_post():
-    post_list = list(db.posts.find({}, {'_id': False})).reverse()
-    return jsonify({'msg': post_list})
+    # post_list = list(db.posts.find({}, {'_id': False})).reverse()
+    post_list = list(db.posts.find({}, {'_id': False}))
+    print(post_list)
+    return jsonify({'data': post_list})
 
 # GET posts detail
 @app.route('/posts/detail')
@@ -165,14 +167,14 @@ def post_page():
 def post():
     token_receive = request.cookies.get('mytoken')
 
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({"id": payload['id']})
-        return render_template('register.html', user_info=user_info)
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
+    # try:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.user.find_one({"id": payload['id']})
+    #     return render_template('register.html', user_info=user_info)
+    # except jwt.ExpiredSignatureError:
+    #     return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
 
     title_receive = request.form['title_give']
     img_receive = request.form['image_give']
@@ -182,8 +184,8 @@ def post():
     date_receive = request.form["date_give"]
 
     doc = {
-        'id': user_info['id'],
-        'nick': user_info['nick'],
+        # 'id': user_info['id'],
+        # 'nick': user_info['nick'],
         'title':title_receive,
         'image':img_receive,
         'content':content_receive,
