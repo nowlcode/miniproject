@@ -104,15 +104,15 @@
     const password = $("#password").val();
     console.log(userId, password);
 
-    //    $.ajax({
-    //      type: "POST",
-    //      url: "/signup",
-    //      data: { id: userId, pw: password },
-    //      success: function (response) {
-    //        alert(response["msg"]);
-    //        window.location.reload();
-    //      },
-    //    });
+    $.ajax({
+      type: "POST",
+      url: "/login",
+      data: { id_give: userId, pw_give: password },
+      success: function (response) {
+        alert(response);
+        window.location.href = "/posts";
+      },
+    });
   }
 
   function Signup() {

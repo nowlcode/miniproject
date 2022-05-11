@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Document</title>
+    <title>게시글 세부사항</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -21,8 +21,22 @@
     />
   </head>
   <body>
-    <h1>main page</h1>
-    <ul class="posts"></ul>
+    <h1>게시글 자세히 보기</h1>
+
+    <div class="container">
+      <div class="row g-2" id="post-row">
+        <div class="col-4">
+          <div class="card" style="width: 18rem">
+            <div class="card-body">
+              <h5 class="card-title">내 게시글</h5>
+              <p class="card-text">게시글 내용이 들어올 자리</p>
+              <p>참가인원: 6</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 
@@ -34,7 +48,7 @@
   function show_list() {
     $.ajax({
       type: "GET",
-      url: "/posts/list",
+      url: "/posts/detail",
       data: {},
       success: function (response) {
         const result = response["data"];
@@ -46,16 +60,19 @@
           const participants = response[i]["participants"];
           const postNumber = response[i]["postNumber"];
 
-          let temp_html = `<div class="card" style="width: 18rem;">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <h5 class="card-title">Card title</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                              <a href="#" class="btn btn-primary">Go somewhere</a>
+          let temp_html = `<div class="col-4">
+                            <div class="card" style="width: 18rem">
+                              <div class="card-body">
+                                <h5 class="card-title">${title}</h5>
+                                <p class="card-text">
+                                  참가인원: ${content}
+                                </p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                              </div>
                             </div>
                           </div>`;
 
-          $("posts").append(temp_html);
+          $("#posts").append(temp_html);
         }
       },
     });
