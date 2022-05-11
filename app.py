@@ -150,49 +150,83 @@ def api_valid():
 
 @app.route('/post/register')
 def post_page():
-    id_receive = request.form['id_give']
-    return render_template('index.html')
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('register.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/post/register', methods=['POST'])
 def post():
-    #닉네임을 가져오는 기능 추가해야할 것 같음
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('register.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
+
     title_receive = request.form['title_give']
-    # img_receive = request.form['image_give']
+    img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    postnum_receive = request.form['postnum_give']
+    # post_receive = request.form['postnum_give']
+    date_receive = request.form["date_give"]
 
     doc = {
+        'id': user_info['id'],
+        'nick': user_info['nick'],
         'title':title_receive,
-
-        # 'image':img_receive,
+        'image':img_receive,
         'content':content_receive,
         'participants': participants_receive,
-        'postnum': postnum_receive,
+       # 'postnum': post_receive,
+        'date': date_receive
     }
     db.posts.insert_one(doc)
 
     return jsonify({'msg': '등록완료!'})
 
 @app.route('/post/edit')
-def post_():
-    id_receive = request.form['id_give']
-
-    return render_template('index.html')
-
-@app.route('/post/edit')
 def post_for_edit():
-    id_receive = request.form['id_give']
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('edit.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
 
     return render_template('index.html')
 
 @app.route('/post/edit', methods=['POST'])
 def post_edit():
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('edit.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
+
     title_receive = request.form['title_give']
     img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    post_receive = request.form['postnum_give']
 
     doc = {
         'title': title_receive,
@@ -200,7 +234,7 @@ def post_edit():
         'content': content_receive,
         'participants': participants_receive,
     }
-    db.posts.update_one({'postnum':post_receive}, {'$set':doc})
+    db.posts.update_one({'title_receive':title_give}, {'$set':doc})
 
     return jsonify({'msg': '수정 완료!'})
 
