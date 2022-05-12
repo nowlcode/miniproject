@@ -17,6 +17,12 @@
       crossorigin="anonymous"
     />
 
+      <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -260,25 +266,7 @@
         text-decoration: none !important;
       }
 
-      /*.top-menu {*/
-      /*    background-color: #ffcab2;*/
-      /*
-
-
-
-
-
-
-
-
-
-
-
-        {#float: right;#}            */
-      /*}*/
-
       #header,
-      #section,
       #container,
       #footer {
         display: block;
@@ -377,7 +365,7 @@
           align-items: center;
         "
       >
-        <a href="#" style="display: inline-block"><h1>끼리끼리</h1></a>
+        <a href="#" style="display: inline-block;font-size: 50px;"><h1>끼리끼리</h1></a>
         <div class="top-menu" style="display: inline-block">
           <ul id="nav">
             <li>
@@ -396,7 +384,7 @@
         <button
           onclick="$('#modal').css('display', 'block');"
           type="button"
-          class="btn btn-secondary"
+          class="button is-primary"
           style="float: right; margin: 10px 50px 0px 0px"
         >
           게시글 등록하기
