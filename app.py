@@ -4,8 +4,10 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta_plus_week1
+client = MongoClient('mongodb+srv://test:sparta99@cluster0.0ngea.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.wze36.mongodb.net/Cluster0?retryWrites=true&w=majority')
+# db = client.dbsparta_plus_week1
 
 import certifi
 ca = certifi.where()
@@ -79,8 +81,9 @@ def post_main():
 # GET posts list
 @app.route('/posts/list', methods=['GET'])
 def main_post():
-    post_list = list(db.posts.find({}, {'_id': False})).reverse()
-    return jsonify({'msg': post_list})
+    # post_list = list(db.posts.find({}, {'_id': False})).reverse()
+    post_list = list(db.posts.find({}, {'_id': False}))
+    return jsonify({'data': post_list})
 
 # GET posts detail
 @app.route('/posts/detail')
@@ -92,7 +95,6 @@ def detail():
 def post_detail():
     post_list = list(db.posts.find({}, {'_id': False})).reverse()
     return jsonify({'data': post_list})
-
 
 @app.route("/login", methods = ["POST"])
 def login_page():
@@ -148,41 +150,113 @@ def api_valid():
 
 @app.route('/post/register')
 def post_page():
-    id_receive = request.form['id_give']
-    return render_template('index.html')
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('register.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/post/register', methods=['POST'])
 def post():
+    token_receive = request.cookies.get('mytoken')
+
+    # try:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.user.find_one({"id": payload['id']})
+    #     return render_template('register.html', user_info=user_info)
+    # except jwt.ExpiredSignatureError:
+    #     return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
+    post_list = list(db.posts.find({}, {'_id': False}))
+    count = len(post_list)+1
+
     title_receive = request.form['title_give']
     img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    post_receive = request.form['postnum_give']
+    date_receive = request.form["date_give"]
+    partNum_receive = request.form['partNum_give']
 
     doc = {
+        # 'id': user_info['id'],
+        # 'nick': user_info['nick'],
         'title':title_receive,
         'image':img_receive,
         'content':content_receive,
         'participants': participants_receive,
-        'postnum': post_receive,
+        'date': date_receive,
+        'partNum': partNum_receive,
+        'num':count,
+        'done':0
     }
     db.posts.insert_one(doc)
-
     return jsonify({'msg': '등록완료!'})
+
+@app.route("/post/done", methods=["POST"])
+def post_participate():
+    num_receive = int(request.form['num_give'])
+    post = db.posts.find_one({'num':num_receive})
+    post["_id"] = str(post["_id"])
+    partNum = int(post['partNum'])+1
+    db.posts.update_one({'num':num_receive},{'$set':{'partNum':partNum,'done':1}})
+    return jsonify({'msg': '참가 완료!'})
+
+@app.route("/post/undo", methods=["POST"])
+def post_cancel():
+    num_receive = int(request.form['num_give'])
+    post = db.posts.find_one({'num':num_receive})
+    post["_id"] = str(post["_id"])
+    partNum = int(post['partNum'])-1
+    db.posts.update_one({'num':num_receive},{'$set':{'partNum':partNum,'done':0}})
+    return jsonify({'msg': '참가 취소!'})
+
+@app.route("/post/complete", methods=["POST"])
+def post_complete():
+    num_receive = int(request.form['num_give'])
+    post = db.posts.find_one({'num':num_receive})
+    post["_id"] = str(post["_id"])
+    title = post['title']
+    print(title)
+    return jsonify({'title': title})
 
 @app.route('/post/edit')
 def post_for_edit():
-    id_receive = request.form['id_give']
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('edit.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
 
     return render_template('index.html')
 
 @app.route('/post/edit', methods=['POST'])
 def post_edit():
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('edit.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login.html", msg="로그인 정보가 존재하지 않습니다."))
+
     title_receive = request.form['title_give']
     img_receive = request.form['image_give']
     content_receive = request.form['content_give']
     participants_receive = request.form['participants_give']
-    post_receive = request.form['postnum_give']
 
     doc = {
         'title': title_receive,
@@ -190,7 +264,7 @@ def post_edit():
         'content': content_receive,
         'participants': participants_receive,
     }
-    db.posts.update_one({'postnum':post_receive}, {'$set':doc})
+    db.posts.update_one({'title_receive':title_give}, {'$set':doc})
 
     return jsonify({'msg': '수정 완료!'})
 
