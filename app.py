@@ -116,7 +116,7 @@ def login_page():
             'id': id_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=3600)
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf8')
 
         # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
