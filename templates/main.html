@@ -234,6 +234,12 @@
               }
           });
       }
+
+      function logout() {
+        window.localStorage.clear()
+        alert('로그아웃을 합니다!')
+        window.location.href = "/"
+      }
     </script>
     <style>
       * {
@@ -377,7 +383,7 @@
             <li>
               <a href="#">User Nickname</a>
               <ul>
-                <li><a href="#">로그아웃</a></li>
+                <li><p onclick="logout()">로그아웃</p></li>
                 <li><a href="#">내 게시글 보기</a></li>
               </ul>
             </li>
