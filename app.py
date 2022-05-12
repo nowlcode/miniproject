@@ -85,14 +85,22 @@ def main_post():
     post_list = list(db.posts.find({}, {'_id': False}))
     return jsonify({'data': post_list})
 
-# GET posts detail
-@app.route('/posts/detail')
+# GET my posts
+@app.route('/myposts')
 def detail():
-    return render_template('postDetail.html')
+    return render_template('myPosts.html')
 
-# GET /posts/detail
-@app.route('/posts/detail', methods=['GET'])
-def post_detail():
+# GET /myposts
+@app.route('/myposts', methods=['GET'])
+def my_post_list():
+    post_list = db.users.aggregate([
+        {
+            '$lookup': {
+                'from': 'comments',
+                'localField': '$'
+            }
+        }
+    ])
     post_list = list(db.posts.find({}, {'_id': False})).reverse()
     return jsonify({'data': post_list})
 
